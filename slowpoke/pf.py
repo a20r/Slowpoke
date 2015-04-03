@@ -20,13 +20,13 @@ class PF(object):
         self.goal = goal
 
     def get_angle_to(self, pos):
-        current_pos = sensors.get_position()
+        current_pos = self.sensors.get_position()
         return math.atan2(self.pos.y - current_pos.y,
                           self.pos.x - current_pos.x)
 
     def get_dist_to_goal(self, pos=None):
         if not pos:
-            pos = sensors.get_position()
+            pos = self.sensors.get_position()
         return pos.euclid_dist(self.goal)
 
     def get_goal_potential(self, pos):
@@ -41,7 +41,7 @@ class PF(object):
         return gp + op
 
     def get_best_sample(self, num_samples=10):
-        current_pos = sensors.get_position()
+        current_pos = self.sensors.get_position()
         hps = self.sensors.kinect.get_hps()
         min_pot = None
         min_pos = None

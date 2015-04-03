@@ -42,7 +42,7 @@ class PF(object):
 
     def get_best_sample(self, num_samples=10):
         current_pos = self.sensors.get_position()
-        hps = self.sensors.kinect.get_hps()
+        hps = self.sensors.kinect_get_hps()
         min_pot = None
         min_pos = None
         for alpha in np.linspace(0, 2 * math.pi, num_samples):

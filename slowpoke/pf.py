@@ -21,8 +21,8 @@ class PF(object):
 
     def get_angle_to(self, pos):
         current_pos = self.sensors.get_position()
-        return math.atan2(self.pos.y - current_pos.y,
-                          self.pos.x - current_pos.x)
+        return math.atan2(pos.y - current_pos.y,
+                          pos.x - current_pos.x)
 
     def get_dist_to_goal(self, pos=None):
         if not pos:

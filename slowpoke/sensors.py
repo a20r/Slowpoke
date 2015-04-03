@@ -29,7 +29,7 @@ class Sensors(object):
         depth, _ = freenect.sync_get_depth()
         height = 240
         hps = list()
-        for i in np.linspace(0, 640, num_hps):
+        for i in np.linspace(0, 639, num_hps):
             alpha = math.radians(-28.5 + 57 * i / 639)
             dist = depth[height, i]
             h_x = self.x + dist * math.cos(math.pi / 2 - alpha)

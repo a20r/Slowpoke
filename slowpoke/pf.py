@@ -49,7 +49,7 @@ class PF(object):
             x_s = current_pos.x + self.s_radius * math.cos(alpha)
             y_s = current_pos.y + self.s_radius * math.sin(alpha)
             p_s = point.make(x_s, y_s)
-            pot = self.get_potential(pos, hps)
+            pot = self.get_potential(p_s, hps)
             if min_pot is None or pot < min_pot:
                 min_pot = pot
                 min_pos = p_s

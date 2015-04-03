@@ -1,4 +1,5 @@
 
-__all__ = ["PF"]
+__all__ = ["PF", "Point"]
 
 from pf import PF
+from point import Point

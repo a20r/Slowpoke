@@ -62,12 +62,13 @@ class PF(object):
             if self.get_dist_to_goal() < 0.5:
                 self.shutdown()
 
+            current_pos = self.sensors.get_position()
             b_s, _ = self.get_best_sample()
 
             move_cmd = Twist()
             move_cmd.linear.x = 0.5
             move_cmd.angular.z = -0.7 * math.sin(
-                self.theta - self.get_angle_to(b_s))
+                current_pos.theta - self.get_angle_to(b_s))
 
             self.cmd_vel.publish(move_cmd)
             r.sleep()

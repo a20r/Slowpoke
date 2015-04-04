@@ -22,18 +22,19 @@ class Sensors(object):
         min_val = depth[0:400, 0:640].min()
         return min_val
 
-    def kinect_get_hps(self, num_hps=10):
+    def kinect_get_hps(self, num_hps=100):
         """
         Gets the absolute hit points
         """
-        depth, _ = freenect.sync_get_depth()
+        depth_org, _ = freenect.sync_get_depth()
+        depth = np.fliplr(depth_org)
         height = 240
         hps = list()
-        for i in np.linspace(0, 639, num_hps):
+        for i in np.linspace(20, 620, num_hps):
             alpha = math.radians(-28.5 + 57 * i / 639)
-            dist = depth[height, i]
-            h_x = self.x + dist * math.cos(math.pi / 2 - alpha)
-            h_y = self.y + dist * math.sin(math.pi / 2 - alpha)
+            dist = depth[height, i] / 1000
+            h_x = self.x + dist * math.cos(alpha)
+            h_y = self.y + dist * math.sin(alpha)
             hps.append(point.make(h_x, h_y))
 
         return hps

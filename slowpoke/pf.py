@@ -9,7 +9,7 @@ import point
 
 class PF(object):
 
-    REP = 10
+    REP = 100
 
     def __init__(self, goal, s_radius=0.4):
         rospy.init_node('slowpoke_pf', anonymous=False)
@@ -40,19 +40,20 @@ class PF(object):
         op = max(map(lambda hp: self.get_obstacle_potential(pos, hp), hps))
         return gp + op
 
-    def get_best_sample(self, num_samples=10):
+    def get_best_sample(self, num_samples=100):
         current_pos = self.sensors.get_position()
         hps = self.sensors.kinect_get_hps()
         min_pot = None
         min_pos = None
-        for alpha in np.linspace(0, 2 * math.pi, num_samples):
-            x_s = current_pos.x + self.s_radius * math.cos(alpha)
-            y_s = current_pos.y + self.s_radius * math.sin(alpha)
-            p_s = point.make(x_s, y_s)
-            pot = self.get_potential(p_s, hps)
+        for alpha in np.linspace(math.radians(-28.5), math.radians(28.5),
+                                 num_samples):
+            x = current_pos.get_x() + self.s_radius * math.sin(alpha)
+            y = current_pos.get_y() + self.s_radius * math.cos(alpha)
+            p = point.make(x, y)
+            pot = self.get_potential(p, hps)
             if min_pot is None or pot < min_pot:
                 min_pot = pot
-                min_pos = p_s
+                min_pos = p
 
         return min_pos, min_pot
 
@@ -61,14 +62,15 @@ class PF(object):
         while not rospy.is_shutdown():
             if self.get_dist_to_goal() < 0.5:
                 self.shutdown()
+                break
 
             current_pos = self.sensors.get_position()
-            b_s, _ = self.get_best_sample()
+            b_s, p = self.get_best_sample()
 
             move_cmd = Twist()
-            move_cmd.linear.x = 0.5
-            move_cmd.angular.z = -0.7 * math.sin(
+            move_cmd.angular.z = -1.1 * math.sin(
                 current_pos.theta - self.get_angle_to(b_s))
+            move_cmd.linear.x = 0.2
 
             self.cmd_vel.publish(move_cmd)
             r.sleep()
